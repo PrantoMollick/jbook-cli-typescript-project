@@ -5,8 +5,8 @@ import { fetchPlugin } from "./plugins/fetch-plugin";
 
 const App: React.FC = () => {
   const ref = useRef<any>();
+  const iframe = useRef<any>();
   const [input, setInput] = useState("");
-  const [code, setCode] = useState("");
 
   const startService = async () => {
     await esbuild.initialize({
@@ -20,14 +20,12 @@ const App: React.FC = () => {
     startService();
   }, []);
 
-  const handleClick = async () => {
+  const handleClick = async (input: string) => {
     if (!ref.current) {
       return;
     }
-    // const result = await esbuild.transform(input, {
-    //   loader: "jsx",
-    //   target: "es2015"
-    // });
+
+    iframe.current.srcdoc = html;
 
     const result = await esbuild.build({
       entryPoints: ["index.js"],
@@ -39,22 +37,53 @@ const App: React.FC = () => {
       }
     });
 
-    console.log(result);
-
-    setCode(result.outputFiles[0].text);
+    // setCode(result.outputFiles[0].text);
+    iframe.current.contentWindow.postMessage(result.outputFiles[0].text, "*");
   };
+
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>source code</title>
+    </head>
+    <body>
+      <div id='root'></div>
+
+      <script>
+        window.addEventListener('message', (e) => {
+          try {
+            eval(event.data);
+          } catch (error) {
+            const root = document.getElementById('root');
+            root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + error + '</div>';
+            console.error(error);
+          }
+        }, false);
+      </script>
+    </body>
+    </html>
+  `;
 
   return (
     <div>
       <textarea
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={(e) => {
+          handleClick(e.target.value);
+          setInput(e.target.value);
+        }}
       ></textarea>
-      <div>
-        <button onClick={handleClick}>Submit</button>
-      </div>
+      <div>{/* <button onClick={handleClick}>Submit</button> */}</div>
 
-      <pre>{code}</pre>
+      <iframe
+        ref={iframe}
+        srcDoc={html}
+        sandbox="allow-scripts"
+        title="preview"
+      />
     </div>
   );
 };
