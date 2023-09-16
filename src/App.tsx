@@ -70,7 +70,10 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <CodeEditor />
+      <CodeEditor
+        onChange={(value: string) => setInput(value)}
+        initialValue="const a = 1;"
+      />
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
