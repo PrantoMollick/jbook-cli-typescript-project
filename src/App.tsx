@@ -2,6 +2,7 @@ import * as esbuild from "esbuild-wasm";
 import { useEffect, useState, useRef } from "react";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 import { fetchPlugin } from "./plugins/fetch-plugin";
+import CodeEditor from "./components/code-editor";
 
 const App: React.FC = () => {
   const ref = useRef<any>();
@@ -20,7 +21,7 @@ const App: React.FC = () => {
     startService();
   }, []);
 
-  const handleClick = async (input: string) => {
+  const handleClick = async () => {
     if (!ref.current) {
       return;
     }
@@ -69,14 +70,14 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <CodeEditor />
       <textarea
         value={input}
-        onChange={(e) => {
-          handleClick(e.target.value);
-          setInput(e.target.value);
-        }}
+        onChange={(e) => setInput(e.target.value)}
       ></textarea>
-      <div>{/* <button onClick={handleClick}>Submit</button> */}</div>
+      <div>
+        <button onClick={handleClick}>Submit</button>
+      </div>
 
       <iframe
         ref={iframe}
