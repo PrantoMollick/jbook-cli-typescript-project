@@ -2,8 +2,8 @@ import "./code-editor.scss";
 import { useRef, useEffect } from "react";
 
 import MonacoEditor, { OnChange, OnMount } from "@monaco-editor/react";
-import monaco from "monaco-editor";
-import codeShift from "jscodeshift";
+// import monaco from "monaco-editor";
+// import codeShift from "jscodeshift";
 import MonacoJSXHighlighter from "monaco-jsx-highlighter";
 
 interface CodeEditorProps {
