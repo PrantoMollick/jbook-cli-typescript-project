@@ -8,17 +8,26 @@ esbuild.initialize({
 });
 
 const Bundle = async (rawCode: string) => {
-  const result = await esbuild.build({
-    entryPoints: ["index.js"],
-    bundle: true,
-    write: false,
-    plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
-    define: {
-      global: "window"
-    }
-  });
-
-  return result.outputFiles[0].text;
+  try {
+    const result = await esbuild.build({
+      entryPoints: ["index.js"],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
+      define: {
+        global: "window"
+      }
+    });
+    return {
+      code: result.outputFiles[0].text,
+      err: ""
+    };
+  } catch (error: any) {
+    return {
+      code: "",
+      err: error.message
+    };
+  }
 };
 
 export default Bundle;

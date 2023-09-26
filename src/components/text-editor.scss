@@ -1,0 +1,23 @@
+.text-editor {
+  .w-md-editor-bar {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
+    height: 11px;
+    cursor: row-resize;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    width: 100%;
+    background-color: #37414b;
+    position: relative;
+    // background-color: #fff;
+    svg {
+      display: none;
+    }
+  }
+}
+
+.wmde-markdown {
+  background-color: transparent;
+  ul {
+    list-style: initial;
+  }
+}
